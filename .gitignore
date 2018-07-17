@@ -1,3 +1,12 @@
+# silly macOS
+.DS_Store
+
+# build files
+build/
+
+# editor config
+.vscode/
+
 # Prerequisites
 *.d
 
