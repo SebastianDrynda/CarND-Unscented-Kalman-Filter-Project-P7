@@ -59,11 +59,11 @@ The simulator provides two datasets. The differences between them are:
 
 Here is the simulator final state after running the UKF with dataset 1:
 
-![Simulator with dataset 1](images/simulator_dataset1.png)
+![Simulator with dataset 1](images/simulator_dataset1.jpg)
 
 Here is the simulator final state after running the UKF with dataset 2:
 
-![Simulator with dataset 1](images/simulator_dataset2.png)
+![Simulator with dataset 1](images/simulator_dataset2.jpg)
 
 # [Rubric](https://review.udacity.com/#!/rubrics/783/view) points
 
