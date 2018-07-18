@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include "tools.h"
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -30,6 +31,18 @@ public:
 
   ///* predicted sigma points matrix
   MatrixXd Xsig_pred_;
+
+  // augmented sigma points
+  MatrixXd Xsig_aug_;
+
+  // Predicted measurement state
+  VectorXd z_pred_ ;
+
+  // Predicted measurement covariance
+  MatrixXd S_;
+
+  // Predicted measurement sigma points
+  MatrixXd Zsig_;
 
   ///* time when the state is true, in us
   long long time_us_;
@@ -67,6 +80,22 @@ public:
   ///* Sigma point spreading parameter
   double lambda_;
 
+  ///* the current NIS for radar
+  double NIS_radar_;
+
+  ///* the current NIS for laser
+  double NIS_laser_;
+
+  // previous timestamp
+  long previous_timestamp_;
+
+  bool debug;
+
+  const int RADAR_N_Z = 3;
+  const int LIDAR_N_Z = 2;
+
+  const double RADAR_NIS = 7.815; // 5.991
+  const double LIDAR_NIS = 7.815; // 5.991
 
   /**
    * Constructor
@@ -79,6 +108,26 @@ public:
   virtual ~UKF();
 
   /**
+   * GenerateAugmentedSigmaPoints
+   */
+  void GenerateAugmentedSigmaPoints();
+
+  /**
+   * SigmaPointPrediction
+   */
+  void SigmaPointPrediction(double delta_t);
+
+  /**
+   * PredictMeanAndCovariance
+   */
+  void PredictMeanAndCovariance();
+
+  /**
+   * NormalizeAngle
+   */
+  double NormalizeAngle(double phi);
+
+  /**
    * ProcessMeasurement
    * @param meas_package The latest measurement data of either radar or laser
    */
@@ -89,19 +138,19 @@ public:
    * matrix
    * @param delta_t Time between k and k+1 in s
    */
-  void Prediction(double delta_t);
+  void PredictMeasurement(MeasurementPackage meas_package, int n_z);
 
   /**
    * Updates the state and the state covariance matrix using a laser measurement
    * @param meas_package The measurement at k+1
    */
-  void UpdateLidar(MeasurementPackage meas_package);
+  void UpdateLidar(MeasurementPackage meas_package, int n_z);
 
   /**
    * Updates the state and the state covariance matrix using a radar measurement
    * @param meas_package The measurement at k+1
    */
-  void UpdateRadar(MeasurementPackage meas_package);
+  void UpdateRadar(MeasurementPackage meas_package, int n_z);
 };
 
 #endif /* UKF_H */
